@@ -24,7 +24,6 @@ namespace DevIO.Api.ViewModels
         public EnderecoViewModel Endereco { get; set; }
         public bool Ativo { get; set; }
 
-        /* EF Relations */
         public IEnumerable<ProdutoViewModel> Produtos { get; set; }
     }
 }
