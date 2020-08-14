@@ -94,7 +94,14 @@ namespace DevIO.Api.Controllers
         [HttpPut("update-address/{id:guid}")]
         public async Task<ActionResult<EnderecoViewModel>> Put(Guid id, EnderecoViewModel enderecoViewModel)
         {
+            if (id != enderecoViewModel.Id) return BadRequest();
 
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var endereco = _mapper.Map<Endereco>(enderecoViewModel);
+            await _fornecedorService.AtualizarEndereco(endereco);
+
+            return CustomResponse(enderecoViewModel);
         }
 
         [HttpDelete("{id:guid}")]
