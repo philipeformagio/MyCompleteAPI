@@ -9,7 +9,7 @@ namespace DevIO.Api.ViewModels
     public class EnderecoViewModel
     {
         [Key]
-        public Guid Key { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Field {0} required.")]
         [StringLength(200, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 2)]
