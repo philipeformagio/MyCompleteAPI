@@ -15,6 +15,11 @@ namespace DevIO.Api.Controllers
             this._notificador = notificador;
         }
 
+        /// <summary>
+        /// Means if the method is going to return a 404(badRequest) or not
+        /// In case it's true will always return a 200(ok) result
+        /// </summary>
+        /// <returns></returns>
         protected bool OperacaoValida()
         {
             return !_notificador.TemNotificacao();
