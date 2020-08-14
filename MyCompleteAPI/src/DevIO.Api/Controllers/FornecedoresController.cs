@@ -16,14 +16,17 @@ namespace DevIO.Api.Controllers
     public class FornecedoresController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
         public FornecedoresController(IFornecedorRepository fornecedorRepository,
+                                      IEnderecoRepository enderecoRepository,
                                       IFornecedorService fornecedorService,
                                       IMapper mapper,
                                       INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
+            _enderecoRepository = enderecoRepository;
             _fornecedorService = fornecedorService;
             _mapper = mapper;
         }
@@ -49,6 +52,13 @@ namespace DevIO.Api.Controllers
             if (fornecedor == null) return NotFound();
 
             return fornecedor;
+        }
+
+        [HttpGet("get-address/{id:guid}")]
+        public async Task<EnderecoViewModel> GetAddressById(Guid id)
+        {
+            var enderecoViewModel = _mapper.Map<EnderecoViewModel>(await _enderecoRepository.ObterPorId(id));
+            return enderecoViewModel;
         }
 
         [HttpPost]
@@ -79,6 +89,12 @@ namespace DevIO.Api.Controllers
             await _fornecedorService.Atualizar(fornecedor);
 
             return CustomResponse(fornecedorViewModel);
+        }
+
+        [HttpPut("update-address/{id:guid}")]
+        public async Task<ActionResult<EnderecoViewModel>> Put(Guid id, EnderecoViewModel enderecoViewModel)
+        {
+
         }
 
         [HttpDelete("{id:guid}")]
