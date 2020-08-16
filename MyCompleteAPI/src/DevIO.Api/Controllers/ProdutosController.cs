@@ -32,7 +32,8 @@ namespace DevIO.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProdutoViewModel>> GetAll()
         {
-            var protudoViewModel = _mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores());
+            var produto = await _produtoRepository.ObterProdutosFornecedores();
+            var protudoViewModel = _mapper.Map<IEnumerable<ProdutoViewModel>>(produto);
             return protudoViewModel;
         }
 
@@ -64,6 +65,32 @@ namespace DevIO.Api.Controllers
             return CustomResponse(produtoViewModel);
         }
 
+        [HttpPost("AddBigFile")]
+        public async Task<ActionResult<ProdutoViewModel>> Post2(ProdutoImagemViewModel produtoViewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var imgPrefix = Guid.NewGuid() + "_";
+            if (!await this.FileUpload2(produtoViewModel.ImagemUpload, imgPrefix))
+            {
+                return CustomResponse(produtoViewModel);
+            }
+
+            produtoViewModel.Imagem = imgPrefix + produtoViewModel.ImagemUpload.FileName;
+            var produto = _mapper.Map<Produto>(produtoViewModel);
+            await _produtoService.Adicionar(produto);
+
+            return CustomResponse(produtoViewModel);
+        }
+
+        //[DisableRequestSizeLimit] // no limit
+        [RequestSizeLimit(40000000)] // limit of 40mb
+        [HttpPost("imagem")]
+        public async Task<ActionResult> AddImage(IFormFile file)
+        {
+            return Ok(file);
+        }
+
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProdutoViewModel>> Delete(Guid id)
         {
@@ -86,13 +113,13 @@ namespace DevIO.Api.Controllers
 
         private bool FileUpload(string file, string imgName)
         {
-            var imageDataByteArray = Convert.FromBase64String(file);
-
             if (string.IsNullOrEmpty(file))
             {
                 NotificarErro("Forneça uma imagem para este produto!");
                 return false;
             }
+
+            var imageDataByteArray = Convert.FromBase64String(file);
 
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgName);
 
@@ -103,6 +130,30 @@ namespace DevIO.Api.Controllers
             }
 
             System.IO.File.WriteAllBytes(filePath, imageDataByteArray);
+            return true;
+        }
+
+        private async Task<bool> FileUpload2(IFormFile file, string imgPrefix)
+        {
+            if (file ==null || file.Length == 0)
+            {
+                NotificarErro("Forneça uma imagem para este produto!");
+                return false;
+            }
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPrefix + file.FileName);
+
+            if (System.IO.File.Exists(path))
+            {
+                NotificarErro("Já existe um arquivo com este nome!");
+                return false;
+            }
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
             return true;
         }
         #endregion
