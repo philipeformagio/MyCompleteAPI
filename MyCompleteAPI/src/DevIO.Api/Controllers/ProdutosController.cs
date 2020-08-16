@@ -47,6 +47,7 @@ namespace DevIO.Api.Controllers
             return produtoViewModel;
         }
 
+
         [HttpPost]
         public async Task<ActionResult<ProdutoViewModel>> Post(ProdutoViewModel produtoViewModel)
         {
@@ -83,6 +84,7 @@ namespace DevIO.Api.Controllers
             return CustomResponse(produtoViewModel);
         }
 
+
         //[DisableRequestSizeLimit] // no limit
         [RequestSizeLimit(40000000)] // limit of 40mb
         [HttpPost("imagem")]
@@ -90,6 +92,38 @@ namespace DevIO.Api.Controllers
         {
             return Ok(file);
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Put(Guid id, ProdutoViewModel produtoViewModel)
+        {
+            if (id != produtoViewModel.Id) return NotFound();
+
+            var produtoAtualizacao = await this.GetProductById(id);
+
+            produtoViewModel.Imagem = produtoAtualizacao.Imagem;
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            if (produtoViewModel.ImagemUpload != null)
+            {
+                var imagemName = Guid.NewGuid() + "_" + produtoViewModel.Imagem;
+                if (!this.FileUpload(produtoViewModel.ImagemUpload, imagemName))
+                {
+                    return CustomResponse(ModelState);
+                }
+
+                produtoAtualizacao.Imagem = imagemName;
+            }
+
+            produtoAtualizacao.Nome = produtoViewModel.Nome;
+            produtoAtualizacao.Descricao = produtoViewModel.Descricao;
+            produtoAtualizacao.Valor = produtoViewModel.Valor;
+            produtoAtualizacao.Ativo = produtoViewModel.Ativo;
+            await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
+
+            return CustomResponse(produtoViewModel);
+        }
+
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProdutoViewModel>> Delete(Guid id)
