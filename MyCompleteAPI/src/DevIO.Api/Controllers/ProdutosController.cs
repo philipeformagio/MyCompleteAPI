@@ -49,7 +49,7 @@ namespace DevIO.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ProdutoViewModel>> Post(ProdutoViewModel produtoViewModel)
         {
-            if (!ModelState.IsValid) return CustomResponse(produtoViewModel);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var imageName = Guid.NewGuid() + "_" + produtoViewModel.Imagem;
             if (!this.FileUpload(produtoViewModel.ImagemUpload, imageName))

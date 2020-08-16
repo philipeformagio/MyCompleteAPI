@@ -43,6 +43,13 @@ namespace DevIO.Api
                 options.SuppressModelStateInvalidFilter = true; // to use your own error custom response
             });
 
+            services.AddCors(o => o.AddPolicy("Development", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.ResolveDependencies();
         }
 
@@ -59,6 +66,7 @@ namespace DevIO.Api
                 app.UseHsts();
             }
 
+            app.UseCors("Development");
             app.UseHttpsRedirection();
             app.UseMvc();
         }
