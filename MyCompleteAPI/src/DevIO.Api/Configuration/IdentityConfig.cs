@@ -43,12 +43,12 @@ namespace DevIO.Api.Configuration
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true, //valida se o token recebido foi do mesmo gerado
+                    ValidateIssuerSigningKey = true, //validma se o token recebido foi do meso gerado
                     IssuerSigningKey = new SymmetricSecurityKey(key), // transforma a chave ascii para uma chave criptografada
                     ValidateIssuer = true, // valida o issuer conforme o nome
                     ValidateAudience = true, // em qual audiencia(quais URLS ele é valido, no caso sua aplicacao) o token é valido
-                    ValidAudience = appSettings.ValidoEm,
-                    ValidIssuer = appSettings.Emissor
+                    ValidAudience = appSettings.ValidoEm, //localhost ou o site/url da sua aplicacao
+                    ValidIssuer = appSettings.Emissor //nome da sua aplicacao
                 };
             });
 
