@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
       this.userService.login(_user)
         .subscribe(
-          result => { this.onSaveComplete(result) },
+          result => { this.onSaveComplete(result), console.log(result) },
           fail => { this.onError(fail) }
         );
     }
