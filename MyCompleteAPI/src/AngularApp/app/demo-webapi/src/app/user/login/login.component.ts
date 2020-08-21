@@ -27,11 +27,11 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.userForm.valid && this.userForm.dirty) {
 
-      let _user = Object.assign({}, this.user, this.userForm.value);
+      let _user: User = Object.assign({}, this.user, this.userForm.value);
 
       this.userService.login(_user)
         .subscribe(
-          result => { this.onSaveComplete(result), console.log(result) },
+          result => { this.onSaveComplete(result) },
           fail => { this.onError(fail) }
         );
     }
