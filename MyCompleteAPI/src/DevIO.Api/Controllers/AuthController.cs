@@ -81,6 +81,7 @@ namespace DevIO.Api.Controllers
         #region .: Private Methods :.
         private async Task<LoginResponseViewModel> JwtGenerate(string email)
         {
+            //TODO: Needs some refactoring
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
             var userRoles = await _userManager.GetRolesAsync(user);
