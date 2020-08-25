@@ -33,11 +33,6 @@ namespace DevIO.Api
 
             services.WebApiConfig();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            });
-
             services.ResolveDependencies();
         }
 
