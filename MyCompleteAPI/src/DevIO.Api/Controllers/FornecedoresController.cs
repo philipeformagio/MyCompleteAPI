@@ -12,7 +12,8 @@ using static DevIO.Api.Extentions.CustomAuthorization;
 namespace DevIO.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class FornecedoresController : MainController
     {
@@ -39,6 +40,7 @@ namespace DevIO.Api.Controllers
         //    var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
         //    return Ok(fornecedores);
         //}
+        [AllowAnonymous]
         [HttpGet]        
         public async Task<IEnumerable<FornecedorViewModel>> GetAll()
         {

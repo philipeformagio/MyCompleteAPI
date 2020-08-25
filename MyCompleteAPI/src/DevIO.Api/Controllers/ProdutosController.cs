@@ -15,7 +15,8 @@ using static DevIO.Api.Extentions.CustomAuthorization;
 namespace DevIO.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ProdutosController : MainController
     {
