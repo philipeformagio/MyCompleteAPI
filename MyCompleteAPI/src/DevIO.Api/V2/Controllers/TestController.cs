@@ -22,15 +22,17 @@ namespace DevIO.Api.V2.Controllers
         [HttpGet]
         public string Valor()
         {
-            try
-            {
-                var i = 0;
-                var result = 42 / i;
-            }
-            catch (DivideByZeroException e)
-            {
-                e.Ship(HttpContext);
-            }
+            throw new Exception("Error");
+
+            //try
+            //{
+            //    var i = 0;
+            //    var result = 42 / i;
+            //}
+            //catch (DivideByZeroException e)
+            //{
+            //    e.Ship(HttpContext);
+            //}
 
             _logger.LogTrace("Log de Trace");
             _logger.LogDebug("Log de Debug");
