@@ -132,6 +132,7 @@ namespace DevIO.Api.Configuration
 
         public async Task Invoke(HttpContext context)
         {
+            //TODO: if it is a local call bypass the authorization
             if (context.Request.Path.StartsWithSegments("/swagger")
                 && !context.User.Identity.IsAuthenticated)
             {
