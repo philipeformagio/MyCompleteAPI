@@ -12,7 +12,7 @@ namespace DevIO.Api.V2.Controllers
         private readonly ILogger _logger;
         public TestController(INotificador notificador, 
                               IUser appUser,
-                              ILogger logger) : base(notificador, appUser)
+                              ILogger<TestController> logger) : base(notificador, appUser)
         {
             _logger = logger;
         }
