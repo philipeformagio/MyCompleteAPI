@@ -1,5 +1,6 @@
 ﻿using DevIO.Api.Extentions;
 using Elmah.Io.AspNetCore;
+using Elmah.Io.AspNetCore.HealthChecks;
 using Elmah.Io.Extensions.Logging;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ namespace DevIO.Api.Configuration
 
 
             services.AddHealthChecks()
+                .AddElmahIoPublisher("8be33f0f98634dd198641c454f3a58a0", new Guid("01dddc21-a35b-4721-ad37-4707b42da77d"), "MyCompelteAPI")
                 .AddCheck("Produtos", new SqlServerHealthCheck(configuration.GetConnectionString("DefaultConnection")))
                 .AddSqlServer(configuration.GetConnectionString("DefaultConnection"), name: "BancoSQL");
 
